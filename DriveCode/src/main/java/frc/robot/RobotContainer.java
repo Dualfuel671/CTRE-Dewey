@@ -14,9 +14,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.PS4Controller; // We added this for the game controllers we have.
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController; (this came with the project template)
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Subsystems.Arm;
+import frc.robot.Subsystems.Wrist;
 import frc.robot.generated.TunerConstants;
 
 public class RobotContainer {
@@ -27,7 +30,8 @@ public class RobotContainer {
   //private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
   private final PS4Controller driver = new PS4Controller(0); // PS4 controller
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
-
+  private final Wrist wrist = new Wrist();
+  private final Arm arm = new Arm();
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -38,8 +42,14 @@ public class RobotContainer {
   private final JoystickButton crossButton = new JoystickButton(driver, 2);
   private final JoystickButton squareButton = new JoystickButton(driver, 1);
   private final JoystickButton leftBumper = new JoystickButton(driver, 5);
-  // private final JoystickButton button = new JoystickButton(driver, 6);
+  private final JoystickButton rightBumper = new JoystickButton(driver, 6);
   // private final JoystickButton leftBumper = new JoystickButton(driver, 5);
+
+  private final JoystickButton leftTriggerButton = new JoystickButton(driver, 7);
+  private final JoystickButton rightTriggerButton = new JoystickButton(driver,8 );
+
+  private final JoystickButton someButtonA = new JoystickButton(driver, 0);
+  private final JoystickButton someButtonB = new JoystickButton(driver, 0);
 
   // Check Drivers station to determine what the POV buttons are...connect controller and toggle buttons on "usb"
   private final POVButton topPov = new POVButton (driver, 0); //POV binding for top POV button, for the "driver" controller 
@@ -114,8 +124,44 @@ public class RobotContainer {
 
     );
 
+/**
+ * left and right trigger buttons for wrist motor
+ */
+    leftTriggerButton.whileTrue(
+      new InstantCommand(wrist::turnClockwise)
+    );
 
+    rightTriggerButton.whileTrue(
+     new InstantCommand(wrist::turnCounterClockwise) 
+    );
 
+    leftTriggerButton.onFalse(
+      new InstantCommand(wrist::stopTurning)
+    );
+
+    rightTriggerButton.onFalse(
+      new InstantCommand(wrist::stopTurning)
+    );
+
+/**
+ *  buttons for raising and lowering the arm
+ */
+    rightBumper.whileTrue(
+      new InstantCommand(arm::turnClockwise)
+    );
+
+    leftBumper.whileTrue(
+      new InstantCommand(arm::turnCounterClockwise)
+      );
+
+    
+    rightBumper.onFalse(
+      new InstantCommand(arm::stopTurning)
+    );
+    
+    leftBumper.onFalse(
+      new InstantCommand(arm::stopTurning)
+    );
 
 
 
@@ -125,7 +171,7 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
     // reset the field-centric heading on left bumper press
-    leftBumper.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    //leftBumper.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
