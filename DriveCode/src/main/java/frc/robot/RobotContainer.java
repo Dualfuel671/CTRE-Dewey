@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Subsystems.Arm;
+import frc.robot.Subsystems.Intake;
+import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.Wrist;
 import frc.robot.generated.TunerConstants;
 
@@ -32,6 +34,8 @@ public class RobotContainer {
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private final Wrist wrist = new Wrist();
   private final Arm arm = new Arm();
+  private final Intake intake = new Intake();
+  private final Shooter shooter = new Shooter();
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -43,14 +47,16 @@ public class RobotContainer {
   private final JoystickButton squareButton = new JoystickButton(driver, 1);
   private final JoystickButton leftBumper = new JoystickButton(driver, 5);
   private final JoystickButton rightBumper = new JoystickButton(driver, 6);
-  // private final JoystickButton leftBumper = new JoystickButton(driver, 5);
+  
 
   private final JoystickButton leftTriggerButton = new JoystickButton(driver, 7);
   private final JoystickButton rightTriggerButton = new JoystickButton(driver,8 );
-
-  private final JoystickButton someButtonA = new JoystickButton(driver, 0);
-  private final JoystickButton someButtonB = new JoystickButton(driver, 0);
-
+  //private final JoystickButton someButtonA = new JoystickButton(driver, 0);
+ // private final JoystickButton someButtonB = new JoystickButton(driver, 0);
+  
+  private final JoystickButton triangle = new JoystickButton(driver, 4);
+  private final JoystickButton circle = new JoystickButton(driver, 3);
+  private final JoystickButton touchpad= new JoystickButton(driver, 14);
   // Check Drivers station to determine what the POV buttons are...connect controller and toggle buttons on "usb"
   private final POVButton topPov = new POVButton (driver, 0); //POV binding for top POV button, for the "driver" controller 
   private final POVButton topRightPov = new POVButton (driver, 45);//POV button for when top and right are pressed, "driver"
@@ -163,8 +169,43 @@ public class RobotContainer {
       new InstantCommand(arm::stopTurning)
     );
 
+/**
+ * 
+ * Buttons for intake in and out.
+ */
+    triangle.whileTrue(
+      new InstantCommand(intake::intaking)
+    );
+/**
+ * 
+ * stops intaking or outtaking
+ */
+    triangle.onFalse(
+      new InstantCommand(intake::stopIntake)
+    );
+    circle.onFalse(
+      new InstantCommand(intake::stopIntake)
+    );
+/**
+ * outtaking button method
+ * 
+ */
+    circle.whileTrue(
+      new InstantCommand(intake::outtaking)
+    );
+/**
+ * shooter button
+ */
+  touchpad.whileTrue(
+    new InstantCommand(shooter::spinShooter)
+  );
 
-
+/**
+ * stop shooter
+ */
+    touchpad.onFalse(
+      new InstantCommand(shooter::stopShooter)
+    );
 
     crossButton.whileTrue(drivetrain.applyRequest(() -> brake)); //sets  to brake mode by making an x
     squareButton.whileTrue(drivetrain
