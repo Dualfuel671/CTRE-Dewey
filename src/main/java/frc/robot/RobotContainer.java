@@ -5,8 +5,8 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,10 +22,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Subsystems.Arm;
-import frc.robot.Subsystems.Intake;
+//
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.Wrist;
-import frc.robot.Subsystems.TestFolder.AmperageTest;
+//import frc.robot.Subsystems.TestFolder.AmperageTest;
 import frc.robot.generated.TunerConstants;
 
 public class RobotContainer {
@@ -38,7 +38,7 @@ public class RobotContainer {
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private final Wrist wrist = new Wrist();
   private final Arm arm = new Arm();
-  private final Intake intake = new Intake();
+  //private final Intake intake = new Intake();
   // private final AmperageTest intake = new AmperageTest();
   private final Shooter shooter = new Shooter();
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -181,7 +181,7 @@ public class RobotContainer {
     //triangle.whileTrue(
       //new InstantCommand(intake::intaking)
    // );
-    triangle.onTrue(
+    /**triangle.onTrue(
       new SequentialCommandGroup(
         new InstantCommand(intake::intaking, intake),
         new WaitCommand(1),
@@ -191,6 +191,7 @@ public class RobotContainer {
         new InstantCommand(shooter::stopShooter, shooter)
 
       ));
+    */
 
 
 
@@ -202,16 +203,16 @@ public class RobotContainer {
     //triangle.onFalse(
      // new InstantCommand(intake::stopIntake)
     //);
-    circle.onFalse(
-      new InstantCommand(intake::stopIntake)
-    );
+    //circle.onFalse(
+      //new InstantCommand(intake::stopIntake)
+    //);
 /**
  * outtaking button method
  * 
  */
-    circle.whileTrue(
-      new InstantCommand(intake::outtaking)
-    );
+    //circle.whileTrue(
+      //new InstantCommand(intake::outtaking)
+   // );
 /**
  * shooter button
  */
@@ -232,17 +233,8 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     //leftBumper.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-    }
-    drivetrain.registerTelemetry(logger::telemeterize);
-  }
-
-  public RobotContainer() {
-    configureBindings();
-  }
-
-  public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
-  }
+   
 }
+}
+  
+    
