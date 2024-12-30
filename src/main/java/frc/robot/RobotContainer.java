@@ -21,10 +21,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController; (this came with the project template)
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Subsystems.Arm;
+//import frc.robot.Subsystems.Arm;
 //
-import frc.robot.Subsystems.Shooter;
-import frc.robot.Subsystems.Wrist;
+//import frc.robot.Subsystems.Shooter;
+//import frc.robot.Subsystems.Wrist;
 //import frc.robot.Subsystems.TestFolder.AmperageTest;
 import frc.robot.generated.TunerConstants;
 
@@ -36,11 +36,11 @@ public class RobotContainer {
   //private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
   private final PS4Controller driver = new PS4Controller(0); // PS4 controller
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  private final Wrist wrist = new Wrist();
-  private final Arm arm = new Arm();
+  //private final Wrist wrist = new Wrist();
+  //private final Arm arm = new Arm();
   //private final Intake intake = new Intake();
   // private final AmperageTest intake = new AmperageTest();
-  private final Shooter shooter = new Shooter();
+  //private final Shooter shooter = new Shooter();
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -71,6 +71,11 @@ public class RobotContainer {
   private final POVButton leftbottomPov = new POVButton (driver, 225);//POV both left and bottom for driver controller
   private final POVButton leftPov = new POVButton (driver, 270);//POV binding for left POV button, for the "driver" controller
   private final POVButton leftTopPov = new POVButton (driver, 315);//POV button for both left and top, driver controller
+
+  public RobotContainer() {
+    configureBindings();
+  }
+
   private void configureBindings() {
    
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -138,41 +143,7 @@ public class RobotContainer {
 /**
  * left and right trigger buttons for wrist motor
  */
-    leftTriggerButton.whileTrue(
-      new InstantCommand(wrist::turnClockwise)
-    );
-
-    rightTriggerButton.whileTrue(
-     new InstantCommand(wrist::turnCounterClockwise) 
-    );
-
-    leftTriggerButton.onFalse(
-      new InstantCommand(wrist::stopTurning)
-    );
-
-    rightTriggerButton.onFalse(
-      new InstantCommand(wrist::stopTurning)
-    );
-
-/**
- *  buttons for raising and lowering the arm
- */
-    rightBumper.whileTrue(
-      new InstantCommand(arm::turnClockwise)
-    );
-
-    leftBumper.whileTrue(
-      new InstantCommand(arm::turnCounterClockwise)
-      );
-
     
-    rightBumper.onFalse(
-      new InstantCommand(arm::stopTurning)
-    );
-    
-    leftBumper.onFalse(
-      new InstantCommand(arm::stopTurning)
-    );
 
 /**
  * 
@@ -216,16 +187,16 @@ public class RobotContainer {
 /**
  * shooter button
  */
-  touchpad.whileTrue(
-    new InstantCommand(shooter::spinShooter)
-  );
+ // touchpad.whileTrue(
+   // new InstantCommand(shooter::spinShooter)
+  //);
 
 /**
  * stop shooter
  */
-    touchpad.onFalse(
-      new InstantCommand(shooter::stopShooter)
-    );
+    //touchpad.onFalse(
+     // new InstantCommand(shooter::stopShooter)
+   // );
 
     crossButton.whileTrue(drivetrain.applyRequest(() -> brake)); //sets  to brake mode by making an x
     squareButton.whileTrue(drivetrain

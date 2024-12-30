@@ -15,7 +15,7 @@ public class NetworkTables {
     }
 
 
-    public boolean getTestEntry(){
-        return testBoolean.get();
-    }
+    //public boolean getTestEntry(){
+      //  return testBoolean.get();
+    //}
 }

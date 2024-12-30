@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run(); 
-    System.out.println(m_networkTables.getTestEntry());
+    //System.out.println(m_networkTables.getTestEntry());
   }
 
   @Override
@@ -37,9 +37,9 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    //if (m_autonomousCommand != null) {
+    //  m_autonomousCommand.schedule();
+   // }
   }
 
   @Override
@@ -50,9 +50,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    //if (m_autonomousCommand != null) {
+    //  m_autonomousCommand.cancel();
+   // }
   }
 
   @Override
