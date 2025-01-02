@@ -8,6 +8,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import java.util.Arrays;
 
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.proto.Photon;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -30,11 +34,12 @@ public class SwerveDrivetrain extends SubsystemBase {
     public boolean teleop = false;
     public SwerveModule[] m_swerveMods;
     public Pigeon2 m_gyro;
+    public PhotonVision m_photonVision;
     private final SwerveDrivePoseEstimator poseEstimator;
 
     public SwerveDrivetrain() {
         m_gyro = new Pigeon2(32, "DriveBus");
-
+        m_photonVision = new PhotonVision();
         m_gyro.reset();
 
         m_swerveMods = new SwerveModule[] {
@@ -238,6 +243,13 @@ public class SwerveDrivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(getYaw(), getModulePositions());
+        
+        
+           var pose = m_photonVision.getRobotPose();
+           pose.ifPresent(
+            est -> {
+            poseEstimator.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds);
+           });
 
         for (SwerveModule mod : m_swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.m_moduleNumber + " Angle",
